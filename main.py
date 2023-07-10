@@ -102,6 +102,43 @@ def nekrasov():
     </body>
     </html>"""
 
+@app.route('/variants/<int:var>')
+def variants(var):
+    if var == 1:
+        return f"""<!doctype html>
+            <html lang="en">
+              <head>
+                <meta charset="utf-8">
+                <link rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" 
+                integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" 
+                crossorigin="anonymous">
+                <title>Варианты выбора</title>
+              </head>
+        <body>
+        <dl>
+        <dt>Пан или пропал</dt>
+        <dd>А что, нельзя выжить, став паном?</dd>
+        </dl>
+        </body></html>"""
+    elif var == 2:
+        return f"""<!doctype html>
+            <html lang="en">
+              <head>
+                <meta charset="utf-8">
+                <link rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" 
+                integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" 
+                crossorigin="anonymous">
+                <title>Варианты выбора</title>
+              </head>
+              <dl>
+                <dt>Даже если Вас съели, у Вас есть два</dt>
+                <dd>А в рассказах Мюнхаузена есть другой способ.</dd>
+              </dl>
+        </body>
+        </html>"""
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)
