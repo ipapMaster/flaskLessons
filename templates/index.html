@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-</head>
-<body>
-    <!-- Шаблонизатор Jinja -->
-    <h1>Hello, {{ username }}!</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="red">Hello, {{ username }}!</h1>
+{% endblock %}

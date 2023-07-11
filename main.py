@@ -11,7 +11,7 @@ app = Flask(__name__)
 def index():
     param = {}
     param['username'] = 'Слушатель'
-    param['title'] = 'Работа с шаблонами'
+    param['title'] = 'Расширяем шаблоны'
     return render_template('index.html', **param)
 
 
@@ -42,13 +42,14 @@ def slogan():
 @app.route('/form_sample', methods=['GET', 'POST'])
 def form_sample():
     if request.method == 'GET':
-        with open('./templates/user_form.html', 'r', encoding='utf-8') as html_stream:
-            return html_stream.read()
+        return render_template('user_form.html', title='Форма')
     elif request.method == 'POST':
-        print(request.method)
-        print(request.form['fname'])
-        print(request.form['sname'])
-        return 'Форма отправлена'
+        f = request.files['file']  # request.form.get('file')
+        f.save('./static/images/loaded.png')
+        myform = request.form.to_dict()
+        return render_template('filled_form.html',
+                               title='Ваши данные',
+                               data=myform)
 
 
 @app.route('/load_photo', methods=['GET', 'POST'])
