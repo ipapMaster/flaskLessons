@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<h1>Кто в очереди за кем?</h1>
+<!-- объявление переменной прямо в html -->
+{% set lst = ['Tom', 'Bob', 'Tim', 'Sam'] %}
+<ul>
+    {% for user in lst %}
+        <li>
+            {{ loop.index }} - {{ user }}
+            {% if loop.first %} - первый
+            {% elif loop.last %} - последний
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+</body>
+</html>

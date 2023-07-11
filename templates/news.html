@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <dl>
+    {% for item in news['news'] %}
+        <dt><b>{{ item['title'] }}</b></dt>
+        <dd>{{ item['content'] }}</dd>
+    {% endfor %}
+    </dl>
+</body>
+</html>
+
+<!--{% for переменная in набор %}-->
+<!--код-->
+<!--{% endfor %}-->
+<!--Внутри цикла доступна некая переменная loop с полезными атрибутами-->
+<!--index - индекс, начиная с 1-->
+<!--index0 - индекс, начиная с 0-->
+<!--first - вернёт True, если это первая итерация-->
+<!--last - вернёт True, если это последняя итерация-->
