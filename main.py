@@ -57,10 +57,13 @@ def weather_form():
         weather = result.json()
         code = weather['cod']
         icon = weather['weather'][0]['icon']
+        temperature = weather['main']['temp']
+        data['code'] = code
+        data['icon'] = icon
+        data['temp'] = temperature
         return render_template('weather.html',
                                title=f'Погода в городе {town}',
-                               town=town, data=weather,
-                               icon=icon)
+                               town=town, data=data)
 
 
 @app.route('/form_sample', methods=['GET', 'POST'])

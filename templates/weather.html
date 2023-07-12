@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Погода в городе {{town}}</h1>
-    <h2>{{data}}</h2>
+    <h2>Температура: {{data['temp']}}&deg;C</h2>
     <img width="100" height="100"
-         src="https://openweathermap.org/img/wn/{{icon}}@2x.png">
+         src="https://openweathermap.org/img/wn/{{data['icon']}}@2x.png">
 {% endblock %}
