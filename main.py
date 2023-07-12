@@ -5,6 +5,18 @@ import json
 import requests
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'too short key'
+
+
+# ошибка 404
+@app.errorhandler(404)
+def http_404_error(error):
+    return redirect('/error404')
+
+
+@app.route('/error404')
+def well():  # колодец
+    return render_template('well.html')
 
 
 @app.route('/')
@@ -50,7 +62,7 @@ def weather_form():
     elif request.method == 'POST':
         town = request.form.get('town')
         data = {}
-        key = 'тут Ваш ключ'
+        key = 'c747bf84924be997ff13ac5034fa3f86'
         url = 'http://api.openweathermap.org/data/2.5/weather'
         params = {'APPID': key, 'q': town, 'units': 'metric'}
         result = requests.get(url, params=params)
