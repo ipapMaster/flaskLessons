@@ -2,6 +2,7 @@
 from flask import Flask, url_for, request, redirect
 from flask import render_template
 import json
+import requests
 
 app = Flask(__name__)
 
@@ -30,13 +31,16 @@ def news():
     # lst = ['ANN', 'TOM', 'BOB']
     # return render_template('news.html', title="FOR", news=lst)
 
+
 @app.route('/vartest')
 def vartest():
     return render_template('var_test.html', title='Переменные в HTML')
 
+
 @app.route('/slogan')
 def slogan():
     return 'Ибо крепка, как смерть, любовь!<br><a href="/">Назад</a>'
+
 
 @app.route('/weather_form', methods=['GET', 'POST'])
 def weather_form():
@@ -45,9 +49,19 @@ def weather_form():
                                title='Выбор города')
     elif request.method == 'POST':
         town = request.form.get('town')
+        data = {}
+        key = 'тут Ваш ключ'
+        url = 'http://api.openweathermap.org/data/2.5/weather'
+        params = {'APPID': key, 'q': town, 'units': 'metric'}
+        result = requests.get(url, params=params)
+        weather = result.json()
+        code = weather['cod']
+        icon = weather['weather'][0]['icon']
         return render_template('weather.html',
                                title=f'Погода в городе {town}',
-                               town=town)
+                               town=town, data=weather,
+                               icon=icon)
+
 
 @app.route('/form_sample', methods=['GET', 'POST'])
 def form_sample():
