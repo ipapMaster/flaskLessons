@@ -3,8 +3,10 @@ from flask import Flask, url_for, request, redirect
 from flask import render_template
 import json
 import requests
+from loginform import LoginForm
 
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = 'too short key'
 
 
@@ -52,6 +54,21 @@ def vartest():
 @app.route('/slogan')
 def slogan():
     return 'Ибо крепка, как смерть, любовь!<br><a href="/">Назад</a>'
+
+
+@app.route('/success')
+def success():
+    return 'Success'
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        return redirect('/success')
+    return render_template('login.html',
+                           title='Авторизация',
+                           form=form)
 
 
 @app.route('/weather_form', methods=['GET', 'POST'])
