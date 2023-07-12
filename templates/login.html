@@ -10,7 +10,7 @@
                 {{ field.label() }}
                 {{ field }}
                 {% for error in field.errors %}
-                <div class="error">{{ error }}</div>
+                <div class="alert alert-danger">{{ error }}</div>
                 {% endfor %}
             </div>
         {% endfor %}
