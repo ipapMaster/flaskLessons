@@ -31,4 +31,4 @@ def global_init(db_file):
 
 def create_session() -> Session:
     global created
-    return created
+    return created()

@@ -16,4 +16,4 @@ class User(SqlAlchemyBase):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     create_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                     default=datetime.datetime.now())
-    news = orm.relationship("News", back_populates='user')
+    news = orm.relationship('News', back_populates='user')
