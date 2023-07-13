@@ -5,8 +5,8 @@ import json
 import requests
 from loginform import LoginForm
 from data import db_session
-
-# pip install sqlalchemy
+from mail_sender import send_mail
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
@@ -128,6 +128,19 @@ def load_photo():
         f = request.files['file']  # request.form.get('file')
         f.save('./static/images/loaded.png')
         return '<h1>Файл у Вас на сервере</h1>'
+
+
+@app.route('/mail', methods=['GET'])
+def get_form():
+    return render_template('mail_send.html')
+
+
+@app.route('/mail', methods=['POST'])
+def post_form():
+    email = request.values.get('email')
+    if send_mail(email, 'Вам письмо', 'Текст письма'):
+        return f'Письмо на адрес {email} отправлено успешно!'
+    return 'Сбой при отправке'
 
 
 if __name__ == '__main__':
