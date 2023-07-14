@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Новости</h1>
+<h1 align="center">Новости</h1>
 {% for item in news %}
 <div class="col border rounded">
     <h2>{{ item.title }}</h2>
-    <div>{{ item.content }}</div>
-    <div>{{ item.user.name }} - {{ item.created_date }}</div>
+    <div class="h4">{{ item.content }}</div>
+    <div class="h4">{{ item.user.name }} - {{ item.created_date.strftime('%d-%m-%Y %H:%M') }}</div>
 </div>
 {% endfor %}
 {% if current_user.is_authenticated %}
