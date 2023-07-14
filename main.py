@@ -1,18 +1,19 @@
 # https://github.com/ipapMaster/flaskLessons
-from flask import Flask, url_for, request, redirect
+import datetime
+
+import requests
+from flask import Flask, request, redirect
 from flask import render_template, make_response, session
 from flask_login import LoginManager, login_user, login_required
 from flask_login import logout_user, current_user
-import json
-import requests
-from loginform import LoginForm
+
 from data import db_session
-from mail_sender import send_mail
-from dotenv import load_dotenv
-from data.users import User
 from data.news import News
+from data.users import User
+from forms.add_news import NewsForm
 from forms.user import RegisterForm
-import datetime
+from loginform import LoginForm
+from mail_sender import send_mail
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -72,15 +73,22 @@ def odd_even():
     return render_template('odd_even.html', number=3)
 
 
-@app.route('/news')
-def news():
-    with open("news.json", "rt", encoding="utf-8") as f:
-        news_list = json.loads(f.read())
-    return render_template('news.html',
-                           title='Новости',
-                           news=news_list)
-    # lst = ['ANN', 'TOM', 'BOB']
-    # return render_template('news.html', title="FOR", news=lst)
+@app.route('/news', methods=['GET', 'POST'])
+@login_required
+def add_news():
+    form = NewsForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        news = News()  # ORM-модель News
+        news.title = form.title.data
+        news.content = form.content.data
+        news.is_private = form.is_private.data
+        current_user.news.append(news)
+        db_sess.merge(current_user)  # слияние сессии с текущим пользователем
+        db_sess.commit()
+        return redirect('/')
+    return render_template('news.html', title='Добавление новости',
+                           form=form)
 
 
 @app.route('/vartest')
@@ -147,6 +155,8 @@ def weather_form():
                                title='Выбор города')
     elif request.method == 'POST':
         town = request.form.get('town')
+        if not town.strip():
+            town = 'Москва'
         data = {}
         key = 'c747bf84924be997ff13ac5034fa3f86'
         url = 'http://api.openweathermap.org/data/2.5/weather'

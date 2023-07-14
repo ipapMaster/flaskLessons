@@ -9,4 +9,7 @@
     <div>{{ item.user.name }} - {{ item.created_date }}</div>
 </div>
 {% endfor %}
+{% if current_user.is_authenticated %}
+    <br><a href="news" class="btn btn-secondary">Добавить новость</a>
+{% endif %}
 {% endblock %}

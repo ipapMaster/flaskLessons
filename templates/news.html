@@ -1,24 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-</head>
-<body>
-    <dl>
-    {% for item in news['news'] %}
-        <dt><b>{{ item['title'] }}</b></dt>
-        <dd>{{ item['content'] }}</dd>
-    {% endfor %}
-    </dl>
-</body>
-</html>
+{% extends "base.html" %}
 
-<!--{% for переменная in набор %}-->
-<!--код-->
-<!--{% endfor %}-->
-<!--Внутри цикла доступна некая переменная loop с полезными атрибутами-->
-<!--index - индекс, начиная с 1-->
-<!--index0 - индекс, начиная с 0-->
-<!--first - вернёт True, если это первая итерация-->
-<!--last - вернёт True, если это последняя итерация-->
+{% block content %}
+<h1 align="center">Добавление новости</h1>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.title.label }}<br>
+        {{ form.title(class="form-control", type="text") }}<br>
+        {% for error in form.title.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.content.label }}<br>
+        {{ form.content(class="form-control", type="text") }}<br>
+        {% for error in form.content.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>{{ form.is_private() }} {{ form.is_private.label }}</p>
+    <p>{{ form.submit(class="btn btn-primary", type="submit") }}</p>
+    <div>{{ message }}</div>
+</form>
+{% endblock %}
