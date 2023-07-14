@@ -1,6 +1,7 @@
 # https://github.com/ipapMaster/flaskLessons
 from flask import Flask, url_for, request, redirect
-from flask import render_template, make_response
+from flask import render_template, make_response, session
+from flask_login import LoginManager
 import json
 import requests
 from loginform import LoginForm
@@ -10,11 +11,21 @@ from dotenv import load_dotenv
 from data.users import User
 from data.news import News
 from forms.user import RegisterForm
+import datetime
 
 app = Flask(__name__)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 app.config['SECRET_KEY'] = 'too short key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/news.sqlite'
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)  # год
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
 # ошибка 404
@@ -163,16 +174,31 @@ def load_photo():
 @app.route('/cookie_test')
 def cookie_test():
     visit_count = int(request.cookies.get('visit_count', 0))
-    if visit_count:
+    if visit_count != 0 and visit_count <= 20:
         res = make_response(f'Были уже {visit_count + 1} раз')
         res.set_cookie('visit_count',
                        str(visit_count + 1),
                        max_age=60 * 60 * 24 * 365 * 2)
+    elif visit_count > 20:
+        print('Мы тут')
+        res = make_response(f'Были уже {visit_count + 1} раз')
+        res.set_cookie('visit_count', '1', max_age=0)
     else:
         res = make_response('Вы впервые здесь за 2 года')
         res.set_cookie('visit_count', '1',
                        max_age=60 * 60 * 24 * 365 * 2)
     return res
+
+
+# Let's Encrypt
+@app.route('/session_test')
+def session_test():
+    visit_count = session.get('visit_count', 0)
+    session['visit_count'] = visit_count + 1
+    if session['visit_count'] > 3:
+        session.pop('visit_count', None)
+    session.permanent = True  # Максимум 31 день
+    return make_response(f'Мы тут были уже {visit_count + 1} раз.')
 
 
 @app.route('/mail', methods=['GET'])
