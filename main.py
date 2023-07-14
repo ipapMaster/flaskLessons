@@ -1,7 +1,8 @@
 # https://github.com/ipapMaster/flaskLessons
 from flask import Flask, url_for, request, redirect
 from flask import render_template, make_response, session
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user, login_required
+from flask_login import logout_user, current_user
 import json
 import requests
 from loginform import LoginForm
@@ -28,6 +29,13 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
+
+
 # ошибка 404
 @app.errorhandler(404)
 def http_404_error(error):
@@ -39,12 +47,21 @@ def well():  # колодец
     return render_template('well.html')
 
 
+@app.errorhandler(401)
+def http_401_handler(error):
+    return redirect('/login')
+
+
 @app.route('/')
 @app.route('/index')
 def index():
     # работу с БД начинаем с открытия сессии
     db_sess = db_session.create_session()
-    news = db_sess.query(News).filter(News.is_private != True)
+    if current_user.is_authenticated:
+        news = db_sess.query(News).filter(
+            (News.user == current_user) | (News.is_private != True))
+    else:
+        news = db_sess.query(News).filter(News.is_private != True)
     return render_template('index.html',
                            title='Новости',
                            news=news)
@@ -110,7 +127,14 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        return redirect('/success')
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect('/')
+        return render_template('login.html', title='Повторная авторизация',
+                               message='Неверный логин или пароль',
+                               form=form)
     return render_template('login.html',
                            title='Авторизация',
                            form=form)

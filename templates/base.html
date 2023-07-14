@@ -18,6 +18,12 @@
                  class="d-inline-block align-top" alt="">Главная</a>
         <a class="navbar-brand" href="/form_sample">Форма</a>
         <a class="navbar-brand" href="/weather_form">Погода</a>
+        {% if current_user.is_authenticated %}
+            <a class="navbar-brand" title="Кликнуть для выхода" href="/logout">{{current_user.name}} (Выйти)</a>
+        {% else %}
+            <a class="navbar-brand" href="/login">Авторизация</a>
+            <a class="navbar-brand" href="/register">Регистрация</a>
+        {% endif %}
     </nav>
 </header>
 <!--Главный контент страницы-->
