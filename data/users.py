@@ -22,7 +22,7 @@ class User(SqlAlchemyBase, UserMixin):
     news = orm.relationship('News', back_populates='user')
 
     def __repr__(self):
-        return f'{self.name} - {self.email}'
+        return f'{self.name}'
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

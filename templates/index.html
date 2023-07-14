@@ -7,9 +7,13 @@
     <h2>{{ item.title }}</h2>
     <div class="h4">{{ item.content }}</div>
     <div class="h4">{{ item.user.name }} - {{ item.created_date.strftime('%d-%m-%Y %H:%M') }}</div>
-</div>
+    {% if current_user.is_authenticated and current_user == item.user %}
+        <a href="/news/{{ item.id }}" class="btn btn-sm btn-warning">Изменить</a>&nbsp; &nbsp;
+        <a href="/news_del/{{ item.id }}" class="btn btn-sm btn-danger">Удалить</a>
+    {% endif %}
+<br><br></div>
 {% endfor %}
 {% if current_user.is_authenticated %}
-    <br><a href="news" class="btn btn-secondary">Добавить новость</a>
+    <br><a href="news" class="btn btn-secondary">Добавить новость</a><br><br>
 {% endif %}
 {% endblock %}
