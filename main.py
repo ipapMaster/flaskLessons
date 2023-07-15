@@ -119,6 +119,7 @@ def edit_news(id):
     return render_template('news.html', title='Редактирование новости',
                            form=form)
 
+
 @app.route('/vartest')
 def vartest():
     return render_template('var_test.html', title='Переменные в HTML')
