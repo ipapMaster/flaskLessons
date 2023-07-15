@@ -27,7 +27,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)  # го�
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
-    return db_sess.query(User).get(user_id)
+    return db_sess.get(User, user_id)
 
 
 @app.route('/logout')
@@ -68,9 +68,17 @@ def index():
                            news=news)
 
 
-@app.route('/odd_even')
-def odd_even():
-    return render_template('odd_even.html', number=3)
+@app.route('/news_del/<int:id>', methods=['GET', 'POST'])
+@login_required
+def news_delete(id):
+    db_sess = db_session.create_session()
+    news = db_sess.query(News).filter(News.id == id, News.user == current_user).first()
+    if news:
+        db_sess.delete(news)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/')
 
 
 @app.route('/news', methods=['GET', 'POST'])
