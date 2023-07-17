@@ -1,4 +1,6 @@
 # https://github.com/ipapMaster/flaskLessons
+# /book/2/page/50 - URL
+# http://127.0.0.1:5000/api/news
 import datetime
 
 import requests
@@ -7,7 +9,7 @@ from flask import render_template, make_response, session
 from flask_login import LoginManager, login_user, login_required
 from flask_login import logout_user, current_user
 
-from data import db_session
+from data import db_session, news_api
 from data.news import News
 from data.users import User
 from forms.add_news import NewsForm
@@ -287,4 +289,5 @@ def post_form():
 
 if __name__ == '__main__':
     db_session.global_init('db/news.sqlite')
+    app.register_blueprint(news_api.blueprint)
     app.run(host='127.0.0.1', port=5000, debug=True)
