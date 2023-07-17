@@ -1,4 +1,4 @@
-from requests import get, post
+from requests import get, post, delete
 
 # тестируем наш API (get-запросы)
 print(get('http://127.0.0.1:5000/api/news/3').json())
@@ -12,9 +12,11 @@ print(post('http://127.0.0.1:5000/api/news', json='').json())
 print(post('http://127.0.0.1:5000/api/news',
            json={'title': 'Заголовок'}).json())
 # корректный запрос
-print(post('http://127.0.0.1:5000/api/news',
-           json={'title': 'Заголовок API',
-                 'content': 'Новость API',
-                 'user_id': 1,
-                 'is_private': False
-                 }).json())
+# print(post('http://127.0.0.1:5000/api/news',
+#            json={'title': 'Заголовок API',
+#                  'content': 'Новость API',
+#                  'user_id': 1,
+#                  'is_private': False
+#                  }).json())
+print(delete('http://127.0.0.1:5000/api/news/999').json())
+print(delete('http://127.0.0.1:5000/api/news/7').json())
