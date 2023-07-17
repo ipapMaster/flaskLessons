@@ -2,14 +2,17 @@
 # /book/2/page/50 - URL
 # http://127.0.0.1:5000/api/news
 # pip install SQLAlchemy-serializer
+# pip install flask-restful
+# pip install alembic
+# news_resources.py - в главной директории
 import datetime
-
 import requests
 from flask import Flask, request, redirect, abort, jsonify
 from flask import render_template, make_response, session
 from flask_login import LoginManager, login_user, login_required
 from flask_login import logout_user, current_user
-
+from flask_restful import Api
+import news_resources
 from data import db_session, news_api
 from data.news import News
 from data.users import User
@@ -19,6 +22,7 @@ from loginform import LoginForm
 from mail_sender import send_mail
 
 app = Flask(__name__)
+api = Api(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -295,5 +299,13 @@ def post_form():
 
 if __name__ == '__main__':
     db_session.global_init('db/news.sqlite')
-    app.register_blueprint(news_api.blueprint)
+    # подключаем api с помощью blueprint
+    # app.register_blueprint(news_api.blueprint)
+
+    # подключаем api с помощью flask-restful
+    # для чего регистрируем классы из news_resources
+    # 1. для списка объектов
+    api.add_resource(news_resources.NewsListResource, '/api/v2/news')
+    # 2. для одного объекта
+    api.add_resource(news_resources.NewsResource, '/api/v2/news/<int:news_id>')
     app.run(host='127.0.0.1', port=5000, debug=True)

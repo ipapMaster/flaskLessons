@@ -1,3 +1,5 @@
+alembic==1.11.1
+aniso8601==9.0.1
 blinker==1.6.2
 certifi==2023.5.7
 charset-normalizer==3.2.0
@@ -5,15 +7,19 @@ click==8.1.5
 colorama==0.4.6
 Flask==2.3.2
 Flask-Login==0.6.2
+Flask-RESTful==0.3.10
 Flask-WTF==1.1.1
 greenlet==2.0.2
 idna==3.4
 importlib-metadata==6.8.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
+Mako==1.2.4
 MarkupSafe==2.1.3
 python-dotenv==1.0.0
+pytz==2023.3
 requests==2.31.0
+six==1.16.0
 SQLAlchemy==2.0.18
 SQLAlchemy-serializer==1.4.1
 typing_extensions==4.7.1
