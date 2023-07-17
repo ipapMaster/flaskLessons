@@ -1,10 +1,11 @@
 # https://github.com/ipapMaster/flaskLessons
 # /book/2/page/50 - URL
 # http://127.0.0.1:5000/api/news
+# pip install SQLAlchemy-serializer
 import datetime
 
 import requests
-from flask import Flask, request, redirect, abort
+from flask import Flask, request, redirect, abort, jsonify
 from flask import render_template, make_response, session
 from flask_login import LoginManager, login_user, login_required
 from flask_login import logout_user, current_user
@@ -42,7 +43,12 @@ def logout():
 # ошибка 404
 @app.errorhandler(404)
 def http_404_error(error):
-    return redirect('/error404')
+    return make_response(jsonify({'error': f'Новости не найдены!'}), 404)
+
+
+@app.errorhandler(400)
+def bad_request(_):
+    return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
 @app.route('/error404')
